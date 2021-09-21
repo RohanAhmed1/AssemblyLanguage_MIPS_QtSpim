@@ -1,0 +1,51 @@
+# convert the fixed celsius temperature into fahrenheit temperature
+
+.data
+cTemp: .word 91
+fTemp: .word 0
+out1: .asciiz "the value in Fahrenheit: "
+
+.text
+.globl main
+.ent main
+main:
+
+    la $t3, cTemp
+    lw $t4, 0($t3)
+    #calculations
+    li $t1, 9
+    mult $t4, $t1                                                                       
+    mflo $s0
+    mfhi $s1
+    add $s0, $s0, $s1
+    
+    addi $s0, $s0, 2
+     
+    li $t2, 5
+    div $s0, $t2
+
+   
+    #result
+    mflo $s0
+    addi $s0, $s0, 32
+    
+    la $t6, fTemp
+    sw $s0, 0($t6)
+
+    la $t3, fTemp
+    lw $s1, 0($t3)
+	
+  	
+    # print output
+
+    li $v0, 4
+    la $a0, out1
+    syscall
+
+    li $v0, 1
+    move $a0, $s1
+    syscall
+
+ 
+    jr $ra
+.end main
